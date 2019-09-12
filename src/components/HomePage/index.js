@@ -1,22 +1,8 @@
 import React, { Component } from 'react'
-import { addNote } from '../../actions'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-
-class NoteListItem extends Component {
-  handleEditClick = () => {
-    const { id } = this.props
-  }
-
-  render() {
-    const { note } = this.props
-    return (
-      <li key={note.id}>
-        {note.name}
-        <button onClick={this.handleEditClick}>Edit</button>
-      </li>
-    )
-  }
-}
+import { addNote } from '../../actions'
+import ListItem from 'ListItem'
 
 class HomePage extends Component {
   constructor(props) {

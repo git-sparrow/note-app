@@ -1,4 +1,4 @@
-const rootReducer = (state = { notes: [],  noteToEdit: null}, action) => {
+const rootReducer = (state = { notes: [], noteToEdit: null }, action) => {
   switch (action.type) {
     case 'ADD_NOTE':
       return {
@@ -12,6 +12,11 @@ const rootReducer = (state = { notes: [],  noteToEdit: null}, action) => {
             id: action.payload.id,
           },
         ],
+      }
+    case 'GET_NOTE_TO_EDIT':
+      return {
+        ...state,
+        noteToEdit: action.payload.id,
       }
     default:
       return state

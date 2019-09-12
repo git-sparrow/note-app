@@ -7,3 +7,8 @@ export const addNote = ({ name, content, author, id }) => ({
     id,
   },
 })
+
+export const getNoteToEdit = id => ({
+  type: 'GET_NOTE_TO_EDIT',
+  payload: id,
+})
