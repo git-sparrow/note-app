@@ -1,14 +1,18 @@
 import React, { Component } from 'react'
 import './App.css'
 
-class TodoList extends Component {
+class NoteListItem extends Component {
+  handleEditClick = () => {
+    const { id } = this.props
+  }
+
   render() {
+    const { note } = this.props
     return (
-      <ul>
-        {this.props.items.map(item => (
-          <li key={item.id}>{item.text}</li>
-        ))}
-      </ul>
+      <li key={note.id}>
+        {note.name}
+        <button onClick={this.handleEditClick}>Edit</button>
+      </li>
     )
   }
 }
@@ -16,39 +20,59 @@ class TodoList extends Component {
 class App extends Component {
   constructor(props) {
     super(props)
-    this.state = { items: [], text: '' }
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-  }
-
-  handleChange(e) {
-    this.setState({ text: e.target.value })
-  }
-
-  handleSubmit(e) {
-    e.preventDefault()
-    if (!this.state.text.length) {
-      return
+    this.state = {
+      notes: [],
+      name: '',
+      content: '',
+      author: '',
+      id: null,
     }
+  }
+
+  handleChange = e => {
+    this.setState({ [e.target.name]: e.target.value })
+  }
+
+  handleSubmit = e => {
+    e.preventDefault()
+    const { name, content, author } = this.state
+
     const newItem = {
-      text: this.state.text,
+      name,
+      content,
+      author,
       id: Date.now(),
     }
+
     this.setState(state => ({
-      items: state.items.concat(newItem),
-      text: '',
+      notes: [...state.notes, newItem],
+      name: '',
+      content: '',
+      author: '',
     }))
   }
 
   render() {
+    const { name, content, author, notes } = this.state
+
     return (
       <div>
         <h3>Notes</h3>
-        <TodoList items={this.state.items} />
+        {!!notes.length && (
+          <ul>
+            {notes.map(item => {
+              return <NoteListItem note={item} />
+            })}
+          </ul>
+        )}
         <form onSubmit={this.handleSubmit}>
-          <label htmlFor="new-todo">What needs to be done?</label>
-          <input id="new-todo" onChange={this.handleChange} value={this.state.text} />
-          <button>Add #{this.state.items.length + 1}</button>
+          <label htmlFor="note-name">Input your note name</label>
+          <input id="note-name" name="name" onChange={this.handleChange} value={name} />
+          <label htmlFor="note-content">Input note content</label>
+          <input id="note-content" name="content" onChange={this.handleChange} value={content} />
+          <label htmlFor="note-author">Author</label>
+          <input id="note-author" name="author" onChange={this.handleChange} value={author} />
+          <button>Add note</button>
         </form>
       </div>
     )
