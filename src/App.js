@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { addNote } from './actions'
+
 import './App.css'
 
 class NoteListItem extends Component {
@@ -36,24 +39,28 @@ class App extends Component {
   handleSubmit = e => {
     e.preventDefault()
     const { name, content, author } = this.state
+    const { onAddNote } = this.props
 
-    const newItem = {
+    const newNote = {
       name,
       content,
       author,
       id: Date.now(),
     }
 
-    this.setState(state => ({
-      notes: [...state.notes, newItem],
+    onAddNote(newNote)
+
+    this.setState({
       name: '',
       content: '',
       author: '',
-    }))
+      id: '',
+    })
   }
 
   render() {
-    const { name, content, author, notes } = this.state
+    const { name, content, author } = this.state
+    const { notes } = this.props
 
     return (
       <div>
@@ -79,4 +86,9 @@ class App extends Component {
   }
 }
 
-export default App
+export default connect(
+  state => {
+    return { notes: state.notes }
+  },
+  { onAddNote: addNote }
+)(App)
