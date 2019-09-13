@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { saveNote } from '../../actions'
+import { saveNote, setData } from '../../actions'
 import ListItem from './ListItem'
 
 class HomePage extends Component {
@@ -22,7 +22,7 @@ class HomePage extends Component {
   handleSubmit = e => {
     e.preventDefault()
     const { name, content, author } = this.state
-    const { onSaveNote } = this.props
+    const { onSaveNote, onSetData, currentStore } = this.props
 
     const newNote = {
       name,
@@ -31,7 +31,8 @@ class HomePage extends Component {
       id: Date.now(),
     }
 
-      onSaveNote(newNote)
+    onSetData({ ...newNote, currentStore: currentStore })
+    onSaveNote(newNote)
 
     this.setState({
       name: '',
@@ -51,7 +52,7 @@ class HomePage extends Component {
         {!!notes.length && (
           <ul>
             {notes.map(item => {
-              return <ListItem note={item} key={item.id}/>
+              return <ListItem note={item} key={item.id} />
             })}
           </ul>
         )}
@@ -71,7 +72,7 @@ class HomePage extends Component {
 
 export default connect(
   state => {
-    return { notes: state.notes }
+    return { notes: state.notes, currentStore: state.currentStore }
   },
-  { onSaveNote: saveNote }
+  { onSaveNote: saveNote, onSetData: setData }
 )(HomePage)

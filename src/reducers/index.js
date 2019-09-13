@@ -1,5 +1,17 @@
-const rootReducer = (state = { notes: [], noteToEdit: null }, action) => {
+const initialState = {
+  isLoading: false,
+  noteToEdit: null,
+  currentStore: true,
+  notes: [],
+}
+
+const rootReducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'TOGGLE_LOADING':
+      return {
+        ...state,
+        ...action.payload,
+      }
     case 'SAVE_NOTE':
       const index = state.notes.findIndex(item => item.id === +action.payload.id)
       function replace(array, index, value) {
@@ -35,7 +47,7 @@ const rootReducer = (state = { notes: [], noteToEdit: null }, action) => {
     case 'GET_NOTE_TO_EDIT':
       return {
         ...state,
-        noteToEdit: action.payload,
+        ...action.payload,
       }
     default:
       return state
