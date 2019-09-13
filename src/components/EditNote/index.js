@@ -1,19 +1,33 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { saveNote } from '../../actions'
+import { connect } from 'react-redux'
 
 class EditNote extends Component {
   constructor(props) {
     super(props)
+    const { notes = [], noteToEdit = '' } = this.props
+    const currentNote = notes.find(index => {
+      return index.id === +noteToEdit
+    })
+    const { name = '', content = '', author = '' } = !!currentNote ? currentNote : []
+
     this.state = {
-      name: '',
-      content: '',
-      author: '',
-      id: '',
+      name,
+      content,
+      author,
+      id: noteToEdit,
     }
   }
 
   handleChanges = e => {
     this.setState({ [e.target.name]: e.target.value })
+  }
+
+  handleSave = () => {
+    const { name, content, author, id } = this.state
+    const { onSaveNote } = this.props
+      onSaveNote({ name, content, author, id })
   }
 
   render() {
@@ -43,7 +57,7 @@ class EditNote extends Component {
               <button
                 className="navbar__button btn btn-light btn-lg"
                 id="saveButton"
-                onClick={() => {}}
+                onClick={this.handleSave}
               >
                 Save
               </button>
@@ -100,4 +114,9 @@ class EditNote extends Component {
   }
 }
 
-export default EditNote
+export default connect(
+  state => {
+    return { notes: state.notes, noteToEdit: state.noteToEdit }
+  },
+  { onSaveNote: saveNote }
+)(EditNote)

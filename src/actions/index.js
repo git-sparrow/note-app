@@ -1,11 +1,11 @@
-export const addNote = ({ name, content, author, id }) => ({
-  type: 'ADD_NOTE',
-  payload: {
-    name,
-    content,
-    author,
-    id,
-  },
+export const saveNote = ({ name, content, author, id }) => ({
+    type: 'SAVE_NOTE',
+    payload: {
+        name,
+        content,
+        author,
+        id,
+    },
 })
 
 export const getNoteToEdit = id => ({

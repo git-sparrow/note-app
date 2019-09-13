@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { addNote } from '../../actions'
-import ListItem from 'ListItem'
+import { saveNote } from '../../actions'
+import ListItem from './ListItem'
 
 class HomePage extends Component {
   constructor(props) {
@@ -23,7 +22,7 @@ class HomePage extends Component {
   handleSubmit = e => {
     e.preventDefault()
     const { name, content, author } = this.state
-    const { onAddNote } = this.props
+    const { onSaveNote } = this.props
 
     const newNote = {
       name,
@@ -32,7 +31,7 @@ class HomePage extends Component {
       id: Date.now(),
     }
 
-    onAddNote(newNote)
+      onSaveNote(newNote)
 
     this.setState({
       name: '',
@@ -52,7 +51,7 @@ class HomePage extends Component {
         {!!notes.length && (
           <ul>
             {notes.map(item => {
-              return <NoteListItem note={item} />
+              return <ListItem note={item} key={item.id}/>
             })}
           </ul>
         )}
@@ -74,5 +73,5 @@ export default connect(
   state => {
     return { notes: state.notes }
   },
-  { onAddNote: addNote }
+  { onSaveNote: saveNote }
 )(HomePage)
