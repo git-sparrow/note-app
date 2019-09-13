@@ -1,4 +1,4 @@
-import { sendData } from '../api'
+import { sendData, fetchData } from '../api'
 
 export const toggleLoading = isLoading => ({
   type: 'TOGGLE_LOADING',
@@ -7,14 +7,9 @@ export const toggleLoading = isLoading => ({
   },
 })
 
-export const saveNote = ({ name, content, author, id }) => ({
-  type: 'SAVE_NOTE',
-  payload: {
-    name,
-    content,
-    author,
-    id,
-  },
+export const updateStore = notes => ({
+  type: 'UPDATE_STORE',
+  payload: notes,
 })
 
 export const getNoteToEdit = noteToEdit => ({
@@ -23,8 +18,25 @@ export const getNoteToEdit = noteToEdit => ({
 })
 
 export const setData = ({ name, content, author, id, currentStore }) => {
-  const newNote = { name, content, author, id }
-  return () => {
+  const newNote = { [`_id${id}`]: { name, content, author, id } }
+
+  return dispatch => {
+    dispatch(toggleLoading(true))
+
     return sendData(newNote, currentStore)
+      .then(() => {
+        fetchData(currentStore)
+      })
+      .then(result => {
+        dispatch(updateStore(result))
+      })
+  }
+}
+
+export const getData = currentStore => {
+  return dispatch => {
+    dispatch(toggleLoading(true))
+
+    return fetchData(currentStore)
   }
 }

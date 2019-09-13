@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { saveNote } from '../../actions'
 import { connect } from 'react-redux'
 
 class EditNote extends Component {
@@ -117,6 +116,5 @@ class EditNote extends Component {
 export default connect(
   state => {
     return { notes: state.notes, noteToEdit: state.noteToEdit }
-  },
-  { onSaveNote: saveNote }
+  }
 )(EditNote)
