@@ -1,5 +1,5 @@
-import { sendData, fetchData } from '../api'
-import {TOGGLE_LOADING, UPDATE_NOTES_STORE, GET_NOTE_TO_EDIT} from './actionTypes'
+import { sendData, fetchData, updateRemoteData } from '../api'
+import { TOGGLE_LOADING, UPDATE_NOTES_STORE, GET_NOTE_TO_EDIT } from './actionTypes'
 
 export const toggleLoading = isLoading => ({
   type: TOGGLE_LOADING,
@@ -36,8 +36,23 @@ export const getData = currentStore => {
     dispatch(toggleLoading(true))
 
     return fetchData(currentStore).then(result => {
-        dispatch(updateNotesStore(result))
-        dispatch(toggleLoading(false))
+      dispatch(updateNotesStore(result))
+      dispatch(toggleLoading(false))
+      return result
+    })
+  }
+}
+
+export const updateData = ({ _id, name, content, author, id, currentStore }) => {
+  const updatedNote = { [_id]: { name, content, author, id } }
+
+  return dispatch => {
+    dispatch(toggleLoading(true))
+
+    return updateRemoteData(updatedNote, currentStore).then(result => {
+      dispatch(updateNotesStore(result))
+      dispatch(toggleLoading(false))
+      return result
     })
   }
 }

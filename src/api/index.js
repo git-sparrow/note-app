@@ -27,6 +27,20 @@ export const fetchData = currentStore => {
   }
 }
 
-export const updateData = () => {}
+export const updateRemoteData = (updatedNote, currentStore) => {
+    if (currentStore) {
+        const data = localStorage.getItem('notes')
+        if (!data) {
+            localStorage.setItem('notes', JSON.stringify(updatedNote))
+
+            return Promise.resolve(updatedNote)
+        }
+        const notes = JSON.parse(data)
+        const newStorage = { ...notes, ...updatedNote }
+        localStorage.setItem('notes', JSON.stringify(newStorage))
+
+        return Promise.resolve(newStorage)
+    }
+}
 
 export const deleteData = () => {}

@@ -8,7 +8,7 @@ class ListItem extends Component {
   handleEditClick = e => {
     const { onGetNoteToEdit, id } = this.props
     onGetNoteToEdit(id)
-    history.push('/edit')
+    history.push(`/edit/${id}`)
   }
 
   render() {

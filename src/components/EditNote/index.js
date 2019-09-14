@@ -1,21 +1,35 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { getData, updateData } from '../../actions'
 
 class EditNote extends Component {
   constructor(props) {
     super(props)
-    const { notes = {}, noteToEdit = '' } = this.props
+    const { notes = {} } = this.props
+    const urlID  = this.props.match.params.id
+    const noteToEdit = !!urlID ? urlID : ''
     const currentNote = notes[noteToEdit]
 
-    const { name = '', content = '', author = '' } = !!currentNote ? currentNote : {}
+    const { name = '', content = '', author = '', id = '' } = !!currentNote ? currentNote : {}
 
     this.state = {
       name,
       content,
       author,
-      id: noteToEdit,
+      id,
+      _id: noteToEdit,
     }
+  }
+
+  componentDidMount() {
+    const { currentStore, onGetData } = this.props
+    onGetData(currentStore)
+      .then(result => {
+        const { name, content, author, id } = result[this.state._id]
+        this.setState({ name, content, author, id })
+      })
+      .catch(error => console.error(error))
   }
 
   handleChanges = e => {
@@ -23,9 +37,9 @@ class EditNote extends Component {
   }
 
   handleSave = () => {
-    const { name, content, author, id } = this.state
-    const { onSaveNote } = this.props
-    onSaveNote({ name, content, author, id })
+    const { _id, name, content, author, id } = this.state
+    const { onUpdateData, currentStore } = this.props
+    onUpdateData({ _id, name, content, author, id, currentStore })
   }
 
   render() {
@@ -113,11 +127,14 @@ class EditNote extends Component {
 }
 
 export default withRouter(
-  connect(notesStore => {
-    return {
-      notes: notesStore.notes,
-      noteToEdit: notesStore.noteToEdit,
-      currentStore: notesStore.currentStore,
-    }
-  })(EditNote)
+  connect(
+    notesStore => {
+      return {
+        notes: notesStore.notes,
+        noteToEdit: notesStore.noteToEdit,
+        currentStore: notesStore.currentStore,
+      }
+    },
+    { onGetData: getData, onUpdateData: updateData }
+  )(EditNote)
 )

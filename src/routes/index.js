@@ -7,7 +7,7 @@ import ShowNote from '../components/ShowNote'
 
 const routes = [
   <Route exact path="/" component={HomePage} />,
-  <Route exact path="/edit" component={EditNote} />,
+  <Route exact path="/edit/:id" component={EditNote} />,
   <Route exact path="/note-list" component={ShowNote} />,
   <Route component={NotFound} />,
 ]
