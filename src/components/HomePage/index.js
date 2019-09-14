@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import toArray from 'lodash/toArray'
 import { getData, setData } from '../../actions'
-import ListItem from './ListItem'
+import NotesList from './NotesList'
 
 class HomePage extends Component {
   constructor(props) {
@@ -50,19 +49,11 @@ class HomePage extends Component {
 
   render() {
     const { name, content, author } = this.state
-    let { notes } = this.props
-    notes = toArray(notes)
 
     return (
       <div>
         <h3>Notes</h3>
-        {!!notes.length && (
-          <ul>
-            {notes.map(item => {
-              return <ListItem note={item} key={item.id} />
-            })}
-          </ul>
-        )}
+        <NotesList/>
         <form onSubmit={this.handleSubmit}>
           <label htmlFor="note-name">Input your note name</label>
           <input id="note-name" name="name" onChange={this.handleChange} value={name} />

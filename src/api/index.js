@@ -19,7 +19,6 @@ export const fetchData = currentStore => {
     const data = localStorage.getItem('notes')
     if (data) {
       const notes = JSON.parse(data)
-      console.log(notes)
 
       return Promise.resolve(notes)
     }

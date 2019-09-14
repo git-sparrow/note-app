@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
-import {Link, withRouter} from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 class EditNote extends Component {
   constructor(props) {
     super(props)
-    const { notes = [], noteToEdit = '' } = this.props
-    const currentNote = notes.find(index => {
-      return index.id === +noteToEdit
-    })
-    const { name = '', content = '', author = '' } = !!currentNote ? currentNote : []
+    const { notes = {}, noteToEdit = '' } = this.props
+    const currentNote = notes[noteToEdit]
+
+    const { name = '', content = '', author = '' } = !!currentNote ? currentNote : {}
 
     this.state = {
       name,
@@ -26,7 +25,7 @@ class EditNote extends Component {
   handleSave = () => {
     const { name, content, author, id } = this.state
     const { onSaveNote } = this.props
-      onSaveNote({ name, content, author, id })
+    onSaveNote({ name, content, author, id })
   }
 
   render() {
@@ -113,8 +112,12 @@ class EditNote extends Component {
   }
 }
 
-export default withRouter(connect(
-  state => {
-    return { notes: state.notes, noteToEdit: state.noteToEdit }
-  }
-)(EditNote))
+export default withRouter(
+  connect(notesStore => {
+    return {
+      notes: notesStore.notes,
+      noteToEdit: notesStore.noteToEdit,
+      currentStore: notesStore.currentStore,
+    }
+  })(EditNote)
+)
