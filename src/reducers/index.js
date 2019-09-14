@@ -1,3 +1,5 @@
+import {TOGGLE_LOADING, UPDATE_NOTES_STORE, GET_NOTE_TO_EDIT} from '../actions/actionTypes'
+
 const initialState = {
   isLoading: false,
   noteToEdit: null,
@@ -7,17 +9,17 @@ const initialState = {
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'TOGGLE_LOADING':
+    case TOGGLE_LOADING:
       return {
         ...state,
         ...action.payload,
       }
-    case 'UPDATE_STORE':
+      case UPDATE_NOTES_STORE:
       return {
         ...state,
         notes: { ...action.payload },
       }
-    case 'GET_NOTE_TO_EDIT':
+    case GET_NOTE_TO_EDIT:
       return {
         ...state,
         ...action.payload,

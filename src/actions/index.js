@@ -1,19 +1,20 @@
 import { sendData, fetchData } from '../api'
+import {TOGGLE_LOADING, UPDATE_NOTES_STORE, GET_NOTE_TO_EDIT} from './actionTypes'
 
 export const toggleLoading = isLoading => ({
-  type: 'TOGGLE_LOADING',
+  type: TOGGLE_LOADING,
   payload: {
     isLoading,
   },
 })
 
-export const updateStore = notes => ({
-  type: 'UPDATE_STORE',
+export const updateNotesStore = notes => ({
+  type: UPDATE_NOTES_STORE,
   payload: notes,
 })
 
 export const getNoteToEdit = noteToEdit => ({
-  type: 'GET_NOTE_TO_EDIT',
+  type: GET_NOTE_TO_EDIT,
   payload: { noteToEdit },
 })
 
@@ -23,13 +24,10 @@ export const setData = ({ name, content, author, id, currentStore }) => {
   return dispatch => {
     dispatch(toggleLoading(true))
 
-    return sendData(newNote, currentStore)
-      .then(() => {
-        fetchData(currentStore)
-      })
-      .then(result => {
-        dispatch(updateStore(result))
-      })
+    return sendData(newNote, currentStore).then(result => {
+      dispatch(updateNotesStore(result))
+      dispatch(toggleLoading(false))
+    })
   }
 }
 
@@ -37,6 +35,9 @@ export const getData = currentStore => {
   return dispatch => {
     dispatch(toggleLoading(true))
 
-    return fetchData(currentStore)
+    return fetchData(currentStore).then(result => {
+        dispatch(updateNotesStore(result))
+        dispatch(toggleLoading(false))
+    })
   }
 }

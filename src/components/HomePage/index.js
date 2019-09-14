@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import toArray from 'lodash/toArray'
 import { getData, setData } from '../../actions'
 import ListItem from './ListItem'
 
@@ -15,8 +17,8 @@ class HomePage extends Component {
   }
 
   componentDidMount() {
-    const { currentStore } = this.props
-    getData(currentStore)
+    const { currentStore, onGetData } = this.props
+    onGetData(currentStore)
   }
 
   handleChange = e => {
@@ -48,7 +50,8 @@ class HomePage extends Component {
 
   render() {
     const { name, content, author } = this.state
-    const { notes } = this.props
+    let { notes } = this.props
+    notes = toArray(notes)
 
     return (
       <div>
@@ -74,9 +77,9 @@ class HomePage extends Component {
   }
 }
 
-export default connect(
-  state => {
-    return { notes: state.notes, currentStore: state.currentStore }
+export default withRouter(connect(
+  notesStore => {
+    return { notes: notesStore.notes, currentStore: notesStore.currentStore }
   },
-  { onSetData: setData }
-)(HomePage)
+  { onGetData: getData, onSetData: setData }
+)(HomePage))

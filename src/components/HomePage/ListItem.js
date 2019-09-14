@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import { getNoteToEdit } from '../../actions'
 import { connect } from 'react-redux'
+import { getNoteToEdit } from '../../actions'
+import history from '../../history'
 
 class ListItem extends Component {
   handleEditClick = e => {
     const { onGetNoteToEdit } = this.props
-    onGetNoteToEdit(e.target.id)
+    const noteToEdit = e.target.id
+    onGetNoteToEdit(noteToEdit)
+    history.push('/edit:')
   }
 
   render() {
@@ -14,16 +16,14 @@ class ListItem extends Component {
     return (
       <li key={note.id}>
         {note.name}
-        <Link to="/edit">
-          <button
-            id={note.id}
-            className="content__table__button-hidden btn btn-link"
-            type="button"
-            onClick={this.handleEditClick}
-          >
-            Edit
-          </button>
-        </Link>
+        <button
+          id={note.id}
+          className="content__table__button-hidden btn btn-link"
+          type="button"
+          onClick={this.handleEditClick}
+        >
+          Edit
+        </button>
       </li>
     )
   }
