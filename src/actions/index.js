@@ -25,7 +25,9 @@ export const setData = ({ name, content, author, id, currentStore }) => {
     dispatch(toggleLoading(true))
 
     return sendData(newNote, currentStore).then(result => {
-      dispatch(updateNotesStore(result))
+      if (currentStore) {
+        dispatch(updateNotesStore(result))
+      }
       dispatch(toggleLoading(false))
     })
   }
@@ -36,7 +38,9 @@ export const getData = currentStore => {
     dispatch(toggleLoading(true))
 
     return fetchData(currentStore).then(result => {
-      dispatch(updateNotesStore(result))
+      if (currentStore) {
+        dispatch(updateNotesStore(result))
+      }
       dispatch(toggleLoading(false))
       return result
     })
@@ -49,8 +53,10 @@ export const updateData = ({ _id, name, content, author, id, currentStore }) => 
   return dispatch => {
     dispatch(toggleLoading(true))
 
-    return updateRemoteData(updatedNote, currentStore).then(result => {
-      dispatch(updateNotesStore(result))
+    return updateRemoteData({ updatedNote, currentStore, _id }).then(result => {
+      if (currentStore) {
+        dispatch(updateNotesStore(result))
+      }
       dispatch(toggleLoading(false))
       return result
     })

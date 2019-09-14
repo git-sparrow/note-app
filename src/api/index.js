@@ -14,13 +14,16 @@ export const sendData = (newNote, currentStore) => {
     const newStorage = { ...notes, ...newNote }
     localStorage.setItem('notes', JSON.stringify(newStorage))
 
-      notesRef.set({
-          'username': 'sadsa',
-          'email': '5456',
-      })
-
     return Promise.resolve(newStorage)
   }
+  notesRef.set(newNote, function(error) {
+    if (error) {
+      console.error(error)
+      return Promise.reject(error)
+    }
+  })
+
+  return Promise.resolve()
 }
 
 export const fetchData = currentStore => {
@@ -36,7 +39,7 @@ export const fetchData = currentStore => {
   }
 }
 
-export const updateRemoteData = (updatedNote, currentStore) => {
+export const updateRemoteData = ({ updatedNote, currentStore, _id }) => {
   if (currentStore) {
     const data = localStorage.getItem('notes')
     if (!data) {
@@ -50,6 +53,14 @@ export const updateRemoteData = (updatedNote, currentStore) => {
 
     return Promise.resolve(newStorage)
   }
+  notesRef.child(_id).update({ ...updatedNote }, function(error) {
+    if (error) {
+      console.error(error)
+      return Promise.reject(error)
+    } else {
+      return Promise.resolve({})
+    }
+  })
 }
 
 export const deleteData = () => {}

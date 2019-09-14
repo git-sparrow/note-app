@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { getData, setData } from '../../actions'
+import { getData, setData, updateNotesStore } from '../../actions'
 import NotesList from './NotesList'
+import firebaseDB from '../../db'
+
+let notesRef = firebaseDB.ref('/notes')
 
 class HomePage extends Component {
   constructor(props) {
@@ -16,8 +19,18 @@ class HomePage extends Component {
   }
 
   componentDidMount() {
-    const { currentStore, onGetData } = this.props
-    onGetData(currentStore)
+    const { currentStore, onGetData, onUpdateNotesStore } = this.props
+    if (currentStore) {
+      onGetData(currentStore).catch(error => console.error(error))
+    }
+    notesRef.on('value', snapshot => {
+      const notes = snapshot.val()
+      onUpdateNotesStore(notes)
+    })
+  }
+
+  componentWillUnmount() {
+    notesRef.off()
   }
 
   handleChange = e => {
@@ -53,7 +66,7 @@ class HomePage extends Component {
     return (
       <div>
         <h3>Notes</h3>
-        <NotesList/>
+        <NotesList />
         <form onSubmit={this.handleSubmit}>
           <label htmlFor="note-name">Input your note name</label>
           <input id="note-name" name="name" onChange={this.handleChange} value={name} />
@@ -68,9 +81,11 @@ class HomePage extends Component {
   }
 }
 
-export default withRouter(connect(
-  notesStore => {
-    return { notes: notesStore.notes, currentStore: notesStore.currentStore }
-  },
-  { onGetData: getData, onSetData: setData }
-)(HomePage))
+export default withRouter(
+  connect(
+    notesStore => {
+      return { notes: notesStore.notes, currentStore: notesStore.currentStore }
+    },
+    { onGetData: getData, onSetData: setData, onUpdateNotesStore: updateNotesStore }
+  )(HomePage)
+)

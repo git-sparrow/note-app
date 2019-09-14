@@ -3,7 +3,7 @@ import {TOGGLE_LOADING, UPDATE_NOTES_STORE, GET_NOTE_TO_EDIT} from '../actions/a
 const initialState = {
   isLoading: false,
   noteToEdit: null,
-  currentStore: true,
+  currentStore: false,
   notes: {},
 }
 
