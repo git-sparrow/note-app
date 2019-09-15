@@ -1,11 +1,12 @@
 import firebaseDB from './firebaseDataBase'
+import {currentStore as remoteStorage} from "./constants";
 import has from 'lodash/has'
 import omit from 'lodash/omit'
 
 const notesRef = firebaseDB.ref('/notes')
 
 export const sendData = ({ newNote, currentStore, _id }) => {
-  if (currentStore) {
+  if (currentStore === remoteStorage.localStorage) {
     const data = localStorage.getItem('notes')
     if (!data) {
       localStorage.setItem('notes', JSON.stringify(newNote))
@@ -26,7 +27,7 @@ export const sendData = ({ newNote, currentStore, _id }) => {
 }
 
 export const fetchData = currentStore => {
-  if (currentStore) {
+  if (currentStore === remoteStorage.localStorage) {
     const data = localStorage.getItem('notes')
     if (data) {
       const notes = JSON.parse(data)
@@ -41,7 +42,7 @@ export const fetchData = currentStore => {
 }
 
 export const updateRemoteData = ({ updatedNote, currentStore, _id }) => {
-  if (currentStore) {
+  if (currentStore === remoteStorage.localStorage) {
     const data = localStorage.getItem('notes')
     if (!data) {
       localStorage.setItem('notes', JSON.stringify(updatedNote))
@@ -63,7 +64,7 @@ export const updateRemoteData = ({ updatedNote, currentStore, _id }) => {
 }
 
 export const deleteRemoteData = (_id, currentStore) => {
-  if (currentStore) {
+  if (currentStore === remoteStorage.localStorage) {
     const data = localStorage.getItem('notes')
     if (data) {
       const notes = JSON.parse(data)

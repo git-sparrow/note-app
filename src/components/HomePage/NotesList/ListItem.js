@@ -15,14 +15,20 @@ class ListItem extends Component {
     const { note } = this.props
 
     return (
-      <li>
-        <div>{note.name}</div>
-        <span>{note.content}</span>
-        <span>{note.author}</span>
+      <li className="list-group-item">
+        <div>
+          <div>Note name: {note.name}</div>
+          <div>
+            {note.content && <div> Content: {note.content}</div>}
+              {note.author && <div>Author: {note.author}</div>}
+          </div>
+          <span>{note.content}</span>
+          <span>{note.author}</span>
+        </div>
         <button
           id={note.id}
-          className="content__table__button-hidden btn btn-link"
           type="button"
+          className="btn btn-warning btn-sm"
           onClick={this.handleEditClick}
         >
           Edit

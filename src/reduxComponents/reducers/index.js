@@ -1,9 +1,10 @@
 import {TOGGLE_LOADING, UPDATE_NOTES_STORE, GET_NOTE_TO_EDIT} from '../actions/actionTypes'
+import {currentStore} from "../../constants";
 
 const initialState = {
   isLoading: false,
   noteToEdit: null,
-  currentStore: false,
+  currentStore: currentStore.localStorage,
   notes: {},
 }
 

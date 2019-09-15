@@ -44,6 +44,10 @@ class EditNote extends Component {
     history.push('/')
   }
 
+  handleCancelClick = () => {
+    history.push('/')
+  }
+
   handleSave = () => {
     const { _id, name, content, author, id } = this.state
     const { onUpdateData, currentStore } = this.props
@@ -61,7 +65,12 @@ class EditNote extends Component {
           </div>
           <div className="navbar__navigation">
             <Link to="/">
-              <button type="button" className="btn btn-outline-light btn-lg" id="canselButton">
+              <button
+                type="button"
+                className="btn btn-outline-light btn-lg"
+                id="canselButton"
+                onClick={this.handleCancelClick}
+              >
                 Cancel
               </button>
             </Link>

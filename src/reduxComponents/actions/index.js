@@ -1,5 +1,6 @@
 import { sendData, fetchData, updateRemoteData, deleteRemoteData } from '../../api'
 import { TOGGLE_LOADING, UPDATE_NOTES_STORE, GET_NOTE_TO_EDIT } from './actionTypes'
+import {currentStore as remoteStorage} from "../../constants";
 
 export const toggleLoading = isLoading => ({
   type: TOGGLE_LOADING,
@@ -26,7 +27,7 @@ export const setData = ({ name, content, author, id, currentStore }) => {
     dispatch(toggleLoading(true))
 
     return sendData({ newNote, currentStore, _id }).then(result => {
-      if (currentStore) {
+      if (currentStore === remoteStorage.localStorage) {
         dispatch(updateNotesStore(result))
       }
       dispatch(toggleLoading(false))
@@ -53,7 +54,7 @@ export const updateData = ({ _id, name, content, author, id, currentStore }) => 
     dispatch(toggleLoading(true))
 
     return updateRemoteData({ updatedNote, currentStore, _id }).then(result => {
-      if (currentStore) {
+      if (currentStore === remoteStorage.localStorage) {
         dispatch(updateNotesStore(result))
       }
       dispatch(toggleLoading(false))
@@ -66,7 +67,7 @@ export const deleteData = ( _id, currentStore ) => {
         dispatch(toggleLoading(true))
 
         return deleteRemoteData( _id, currentStore  ).then(result => {
-            if (currentStore) {
+            if (currentStore === remoteStorage.localStorage) {
                 dispatch(updateNotesStore(result))
             }
             dispatch(toggleLoading(false))

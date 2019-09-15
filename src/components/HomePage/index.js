@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom'
 import { getData, setData, updateNotesStore } from '../../reduxComponents/actions'
 import NotesList from './NotesList'
 import firebaseDB from '../../firebaseDataBase'
+import {currentStore as remoteStorage} from "../../constants";
 
 const notesRef = firebaseDB.ref('/notes')
 
@@ -20,7 +21,7 @@ class HomePage extends Component {
 
   componentDidMount() {
     const { currentStore, onGetData, onUpdateNotesStore } = this.props
-    if (currentStore) {
+    if (currentStore === remoteStorage.localStorage) {
       onGetData(currentStore).catch(console.error)
     } else {
       notesRef.on('value', snapshot => {
@@ -65,21 +66,66 @@ class HomePage extends Component {
 
   render() {
     const { name, content, author } = this.state
+    const { currentStore } = this.props
 
     return (
-      <div>
-        <h3>Notes</h3>
-        <NotesList />
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor="note-name">Input your note name</label>
-          <input id="note-name" name="name" onChange={this.handleChange} value={name} />
-          <label htmlFor="note-content">Input note content</label>
-          <input id="note-content" name="content" onChange={this.handleChange} value={content} />
-          <label htmlFor="note-author">Author</label>
-          <input id="note-author" name="author" onChange={this.handleChange} value={author} />
-          <button>Add note</button>
-        </form>
-      </div>
+      <>
+        <nav className="navbar sticky-top navbar-dark bg-primary row">
+          <div className="col-4 form-group">
+            <button type="button" class="btn btn-success">
+              LocalStorage
+            </button>
+            <button type="button" className="btn btn-secondary ml-1">
+              Firebase
+            </button>
+          </div>
+          <div className="col-8 text-left">
+            <h1 className="">Notes app</h1>
+          </div>
+        </nav>
+        <div className="row p-3">
+          <div className="col-6">
+            <form onSubmit={this.handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="note-name">Input your note name</label>
+                <input
+                  id="note-name"
+                  className="form-control"
+                  name="name"
+                  onChange={this.handleChange}
+                  value={name}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="note-content">Input note content</label>
+                <input
+                  id="note-content"
+                  className="form-control"
+                  name="content"
+                  onChange={this.handleChange}
+                  value={content}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="note-author">Author</label>
+                <input
+                  id="note-author"
+                  className="form-control"
+                  name="author"
+                  onChange={this.handleChange}
+                  value={author}
+                />
+              </div>
+              <button type="button" className="btn btn-primary">
+                Add note
+              </button>
+            </form>
+          </div>
+          <div className="col-6">
+            <NotesList />
+          </div>
+        </div>
+      </>
     )
   }
 }
