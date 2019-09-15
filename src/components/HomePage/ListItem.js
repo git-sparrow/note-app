@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getNoteToEdit } from '../../actions'
+import { getNoteToEdit } from '../../reduxComponents/actions'
 import history from '../../history'
 
 class ListItem extends Component {

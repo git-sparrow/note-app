@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getData, updateData } from '../../actions'
+import { getData, updateData } from '../../reduxComponents/actions'
 
 class EditNote extends Component {
   constructor(props) {

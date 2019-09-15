@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { getNoteToEdit } from '../../../actions'
+import { getNoteToEdit } from '../../../reduxComponents/actions'
 import ListItem from './ListItem'
 import isEmpty from 'lodash/isEmpty'
 

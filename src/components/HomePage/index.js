@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { getData, setData, updateNotesStore } from '../../actions'
+import { getData, setData, updateNotesStore } from '../../reduxComponents/actions'
 import NotesList from './NotesList'
-import firebaseDB from '../../db'
+import firebaseDB from '../../firebaseDataBase'
 
 const notesRef = firebaseDB.ref('/notes')
 

@@ -1,4 +1,4 @@
-import { sendData, fetchData, updateRemoteData } from '../api'
+import { sendData, fetchData, updateRemoteData } from '../../api'
 import { TOGGLE_LOADING, UPDATE_NOTES_STORE, GET_NOTE_TO_EDIT } from './actionTypes'
 
 export const toggleLoading = isLoading => ({

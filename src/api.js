@@ -1,4 +1,4 @@
-import firebaseDB from '../db'
+import firebaseDB from './firebaseDataBase'
 
 const notesRef = firebaseDB.ref('/notes')
 
