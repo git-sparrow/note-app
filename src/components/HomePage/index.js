@@ -70,7 +70,7 @@ class HomePage extends Component {
 
   handleSubmit = e => {
     e.preventDefault()
-    const { name, content, author } = this.state
+    const { name, content } = this.state
     const { onSetData, currentStore } = this.props
 
     const newNote = {

@@ -6,10 +6,12 @@ import {
   setData,
   updateNotesStore,
   changeRemoteStore,
+  updateData,
 } from '../../reduxComponents/actions'
 import CommentaryList from './CommentaryList'
 import firebaseDB from '../../firebaseDataBase'
 import { currentStore as remoteStorage } from '../../constants'
+import history from '../../history'
 
 const notesRef = firebaseDB.ref('/notes')
 
@@ -37,7 +39,7 @@ class ViewNote extends Component {
   }
 
   componentDidMount() {
-    const { currentStore, onGetData } = this.props
+    const { currentStore, onGetData, onUpdateNotesStore } = this.props
     const urlID = this.props.match.params.id
     const _id = !!urlID ? urlID : ''
     onGetData(currentStore)
@@ -46,13 +48,56 @@ class ViewNote extends Component {
         this.setState({ name, content, commentary })
       })
       .catch(console.error)
+
+    if (currentStore === remoteStorage.firebase) {
+      notesRef.on('value', snapshot => {
+        const notes = snapshot.val()
+        if (notes) {
+          onUpdateNotesStore(notes)
+        }
+      })
+    }
+  }
+
+  componentWillUnmount() {
+    notesRef.off()
+  }
+
+  handleBacklClick = () => {
+    history.push('/')
   }
 
   handleInputChange = e => {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  handleSubmit = e => {}
+  handleSubmit = e => {
+    e.preventDefault()
+    let { _id, name, content, commentary, commentaryAuthor, commentaryContent } = this.state
+    if (!commentary.length) {
+      commentary = [
+        {
+          author: commentaryAuthor,
+          content: commentaryContent,
+          created_at: new Date().toLocaleDateString(),
+        },
+      ]
+    } else {
+      const newCommentary = {
+        author: commentaryAuthor,
+        content: commentaryContent,
+        created_at: new Date().toLocaleDateString(),
+      }
+      commentary.push(newCommentary)
+    }
+    const { onUpdateData, currentStore } = this.props
+    onUpdateData({ _id, name, content, commentary, currentStore }).catch(console.error)
+
+    this.setState({
+      commentaryAuthor: '',
+      commentaryContent: '',
+    })
+  }
 
   render() {
     const { name, content, commentary, commentaryAuthor, commentaryContent } = this.state
@@ -66,7 +111,7 @@ class ViewNote extends Component {
               type="button"
               className="btn btn-outline-light btn-lg float-right"
               id="canselButton"
-              onClick={this.handleCancelClick}
+              onClick={this.handleBacklClick}
             >
               Back
             </button>
@@ -89,7 +134,7 @@ class ViewNote extends Component {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="note-content">Content</label>
+                <label htmlFor="note-content">Author</label>
                 <input
                   id="note-content"
                   className="form-control"
@@ -118,6 +163,7 @@ export default withRouter(
     {
       onGetData: getData,
       onSetData: setData,
+      onUpdateData: updateData,
       onUpdateNotesStore: updateNotesStore,
       onChangeRemoteStore: changeRemoteStore,
     }

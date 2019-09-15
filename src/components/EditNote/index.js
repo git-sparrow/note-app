@@ -52,7 +52,6 @@ class EditNote extends Component {
 
   handleSave = () => {
     const { _id, name, content, commentary } = this.state
-    console.log(_id)
     const { onUpdateData, currentStore } = this.props
     onUpdateData({ _id, name, content, commentary, currentStore }).catch(console.error)
     history.push('/')
