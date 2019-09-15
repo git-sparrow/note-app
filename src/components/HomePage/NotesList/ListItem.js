@@ -5,34 +5,67 @@ import { getNoteToEdit } from '../../../reduxComponents/actions'
 import history from '../../../history'
 
 class ListItem extends Component {
-  handleEditClick = e => {
-    const { onGetNoteToEdit, id } = this.props
-    onGetNoteToEdit(id)
-    history.push(`/edit/${id}`)
+  handleViewClick = e => {
+      const { onGetNoteToEdit, _id } = this.props
+      onGetNoteToEdit(_id)
+      history.push(`/view-note/${_id}`)
   }
 
+  handleEditClick = e => {
+    const { onGetNoteToEdit, _id } = this.props
+    onGetNoteToEdit(_id)
+    history.push(`/edit/${_id}`)
+  }
+
+  handleDeleteClick = e => {}
+
   render() {
-    const { note } = this.props
+    const { note, _id } = this.props
+    const { commentary } = note
 
     return (
       <li className="list-group-item">
         <div>
           <div>Note name: {note.name}</div>
-          <div>
-            {note.content && <div> Content: {note.content}</div>}
-              {note.author && <div>Author: {note.author}</div>}
-          </div>
-          <span>{note.content}</span>
-          <span>{note.author}</span>
+          <div>Content: {note.content}</div>
+          {commentary &&
+            commentary.length &&
+            commentary.map(item => {
+              return (
+                <div>
+                  <div>Author: {item.author}</div>
+                  <div>Content: {item.content}</div>
+                  <div>Created at: {item.created_at}</div>
+                </div>
+              )
+            })}
         </div>
-        <button
-          id={note.id}
-          type="button"
-          className="btn btn-warning btn-sm"
-          onClick={this.handleEditClick}
-        >
-          Edit
-        </button>
+        <div className="d-flex">
+          <button
+            id={_id}
+            type="button"
+            className="btn btn-primary btn-sm"
+            onClick={this.handleViewClick}
+          >
+            View
+          </button>
+          <button
+            id={_id}
+            type="button"
+            className="btn btn-warning btn-sm ml-1"
+            onClick={this.handleEditClick}
+          >
+            Edit
+          </button>
+          <button
+            id={_id}
+            type="button"
+            className="btn btn-danger btn-sm ml-auto"
+            onClick={this.handleDeleteClick}
+          >
+            Delete
+          </button>
+        </div>
       </li>
     )
   }

@@ -20,8 +20,6 @@ class HomePage extends Component {
     this.state = {
       name: '',
       content: '',
-      author: '',
-      id: '',
     }
   }
 
@@ -78,8 +76,8 @@ class HomePage extends Component {
     const newNote = {
       name,
       content,
-      author,
-      id: Date.now(),
+      commentary: '',
+      _id: `_id${Date.now()}`,
       currentStore,
     }
 
@@ -88,8 +86,6 @@ class HomePage extends Component {
     this.setState({
       name: '',
       content: '',
-      author: '',
-      id: '',
     })
   }
 
@@ -145,23 +141,13 @@ class HomePage extends Component {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="note-content">Input note content</label>
+                <label htmlFor="note-content">Content</label>
                 <input
                   id="note-content"
                   className="form-control"
                   name="content"
                   onChange={this.handleInputChange}
                   value={content}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="note-author">Author</label>
-                <input
-                  id="note-author"
-                  className="form-control"
-                  name="author"
-                  onChange={this.handleInputChange}
-                  value={author}
                 />
               </div>
               <button type="submit" className="btn btn-primary">

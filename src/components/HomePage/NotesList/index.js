@@ -16,7 +16,7 @@ class NotesList extends Component {
     return (
       <ul className="list-group list-group-flush">
         {Object.keys(notes).map(index => (
-          <ListItem id={index} note={notes[index]} key={index} />
+          <ListItem _id={index} note={notes[index]} key={index} />
         ))}
       </ul>
     )

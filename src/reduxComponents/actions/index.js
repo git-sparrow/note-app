@@ -31,14 +31,13 @@ export const toggleRemoteStorage = value => ({
   },
 })
 
-export const setData = ({ name, content, author, id, currentStore }) => {
-  const _id = `_id${id}`
-  const newNote = { [_id]: { name, content, author, id } }
+export const setData = ({ name, content, commentary, _id, currentStore }) => {
+  const newNote = { [_id]: { name, content, commentary } }
 
   return dispatch => {
     dispatch(toggleLoading(true))
 
-    return sendData({ newNote, currentStore, _id }).then(result => {
+    return sendData(newNote, currentStore).then(result => {
       if (currentStore === remoteStorage.localStorage) {
         dispatch(updateNotesStore(result))
       }
@@ -59,8 +58,8 @@ export const getData = currentStore => {
   }
 }
 
-export const updateData = ({ _id, name, content, author, id, currentStore }) => {
-  const updatedNote = { [_id]: { name, content, author, id } }
+export const updateData = ({ _id, name, content, commentary, currentStore }) => {
+  const updatedNote = { [_id]: { name, content, commentary } }
 
   return dispatch => {
     dispatch(toggleLoading(true))

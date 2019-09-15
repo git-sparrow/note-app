@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { getData, updateData, deleteData } from '../../reduxComponents/actions'
 import history from '../../history'
@@ -8,17 +8,19 @@ class EditNote extends Component {
   constructor(props) {
     super(props)
     const { notes = {} } = this.props
+    console.log(notes)
     const urlID = this.props.match.params.id
     const noteToEdit = !!urlID ? urlID : ''
+    console.log(noteToEdit)
     const currentNote = notes[noteToEdit]
+    console.log(currentNote)
 
-    const { name = '', content = '', author = '', id = '' } = !!currentNote ? currentNote : {}
+    const { name = '', content = '', commentary = [] } = !!currentNote ? currentNote : {}
 
     this.state = {
       name,
       content,
-      author,
-      id,
+      commentary,
       _id: noteToEdit,
     }
   }
@@ -27,8 +29,8 @@ class EditNote extends Component {
     const { currentStore, onGetData } = this.props
     onGetData(currentStore)
       .then(result => {
-        const { name, content, author, id } = result[this.state._id]
-        this.setState({ name, content, author, id })
+        const { name, content, commentary } = result[this.state._id]
+        this.setState({ name, content, commentary })
       })
       .catch(console.error)
   }
@@ -49,13 +51,15 @@ class EditNote extends Component {
   }
 
   handleSave = () => {
-    const { _id, name, content, author, id } = this.state
+    const { _id, name, content, commentary } = this.state
+    console.log(_id)
     const { onUpdateData, currentStore } = this.props
-    onUpdateData({ _id, name, content, author, id, currentStore }).catch(console.error)
+    onUpdateData({ _id, name, content, commentary, currentStore }).catch(console.error)
+    history.push('/')
   }
 
   render() {
-    const { name, content, author } = this.state
+    const { name, content } = this.state
 
     return (
       <div className="editContact-form">
@@ -64,16 +68,14 @@ class EditNote extends Component {
             <h1>Edit note</h1>
           </div>
           <div className="navbar__navigation">
-            <Link to="/">
-              <button
-                type="button"
-                className="btn btn-outline-light btn-lg"
-                id="canselButton"
-                onClick={this.handleCancelClick}
-              >
-                Cancel
-              </button>
-            </Link>
+            <button
+              type="button"
+              className="btn btn-outline-light btn-lg"
+              id="canselButton"
+              onClick={this.handleCancelClick}
+            >
+              Cancel
+            </button>
             <button
               type="button"
               className="btn btn-danger btn-lg"
@@ -82,15 +84,13 @@ class EditNote extends Component {
             >
               Delete
             </button>
-            <Link to="/">
-              <button
-                className="navbar__button btn btn-light btn-lg"
-                id="saveButton"
-                onClick={this.handleSave}
-              >
-                Save
-              </button>
-            </Link>
+            <button
+              className="navbar__button btn btn-light btn-lg"
+              id="saveButton"
+              onClick={this.handleSave}
+            >
+              Save
+            </button>
           </div>
         </nav>
         <div className="content container-fluid">
@@ -119,19 +119,6 @@ class EditNote extends Component {
                     name="content"
                     onChange={this.handleChanges}
                     value={content}
-                  />
-                </label>
-              </div>
-              <div className="form-group col-md-6">
-                <label className="input-label">
-                  Author
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Author"
-                    name="author"
-                    onChange={this.handleChanges}
-                    value={author}
                   />
                 </label>
               </div>
