@@ -21,14 +21,15 @@ class HomePage extends Component {
   componentDidMount() {
     const { currentStore, onGetData, onUpdateNotesStore } = this.props
     if (currentStore) {
-      onGetData(currentStore).catch(error => console.error(error))
-    }
-    notesRef.on('value', snapshot => {
-      const notes = snapshot.val()
+      onGetData(currentStore).catch(console.error)
+    } else {
+      notesRef.on('value', snapshot => {
+        const notes = snapshot.val()
         if (notes) {
-            onUpdateNotesStore(notes)
+          onUpdateNotesStore(notes)
         }
-    })
+      })
+    }
   }
 
   componentWillUnmount() {
@@ -52,7 +53,7 @@ class HomePage extends Component {
       currentStore,
     }
 
-    onSetData(newNote).catch(error => console.error(error))
+    onSetData(newNote).catch(console.error)
 
     this.setState({
       name: '',

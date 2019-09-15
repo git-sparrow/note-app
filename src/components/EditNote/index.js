@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getData, updateData } from '../../reduxComponents/actions'
+import { getData, updateData, deleteData } from '../../reduxComponents/actions'
+import history from '../../history'
 
 class EditNote extends Component {
   constructor(props) {
@@ -29,19 +30,24 @@ class EditNote extends Component {
         const { name, content, author, id } = result[this.state._id]
         this.setState({ name, content, author, id })
       })
-      .catch(error => console.error(error))
+      .catch(console.error)
   }
 
   handleChanges = e => {
     this.setState({ [e.target.name]: e.target.value })
   }
 
+  handleDeletion = () => {
+    const { onDeleteNote, currentStore } = this.props
+    const { _id } = this.state
+    onDeleteNote(_id, currentStore).catch(console.error)
+    history.push('/')
+  }
+
   handleSave = () => {
     const { _id, name, content, author, id } = this.state
     const { onUpdateData, currentStore } = this.props
-    onUpdateData({ _id, name, content, author, id, currentStore }).catch(error =>
-      console.error(error)
-    )
+    onUpdateData({ _id, name, content, author, id, currentStore }).catch(console.error)
   }
 
   render() {
@@ -63,7 +69,7 @@ class EditNote extends Component {
               type="button"
               className="btn btn-danger btn-lg"
               id="deleteButton"
-              onClick={() => {}}
+              onClick={this.handleDeletion}
             >
               Delete
             </button>
@@ -137,6 +143,6 @@ export default withRouter(
         currentStore: notesStore.currentStore,
       }
     },
-    { onGetData: getData, onUpdateData: updateData }
+    { onGetData: getData, onUpdateData: updateData, onDeleteNote: deleteData }
   )(EditNote)
 )

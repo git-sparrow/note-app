@@ -1,4 +1,4 @@
-import { sendData, fetchData, updateRemoteData } from '../../api'
+import { sendData, fetchData, updateRemoteData, deleteRemoteData } from '../../api'
 import { TOGGLE_LOADING, UPDATE_NOTES_STORE, GET_NOTE_TO_EDIT } from './actionTypes'
 
 export const toggleLoading = isLoading => ({
@@ -59,4 +59,17 @@ export const updateData = ({ _id, name, content, author, id, currentStore }) => 
       dispatch(toggleLoading(false))
     })
   }
+}
+
+export const deleteData = ( _id, currentStore ) => {
+    return dispatch => {
+        dispatch(toggleLoading(true))
+
+        return deleteRemoteData( _id, currentStore  ).then(result => {
+            if (currentStore) {
+                dispatch(updateNotesStore(result))
+            }
+            dispatch(toggleLoading(false))
+        })
+    }
 }

@@ -1,4 +1,6 @@
 import firebaseDB from './firebaseDataBase'
+import has from 'lodash/has'
+import omit from 'lodash/omit'
 
 const notesRef = firebaseDB.ref('/notes')
 
@@ -16,7 +18,7 @@ export const sendData = ({ newNote, currentStore, _id }) => {
 
     return Promise.resolve(newStorage)
   }
-    return notesRef.update(newNote, (error) => {
+  return notesRef.update(newNote, error => {
     if (error) {
       throw new Error(error.message)
     }
@@ -53,11 +55,30 @@ export const updateRemoteData = ({ updatedNote, currentStore, _id }) => {
     return Promise.resolve(newStorage)
   }
 
-  return notesRef.update({ ...updatedNote }, (error) => {
+  return notesRef.update({ ...updatedNote }, error => {
     if (error) {
       throw new Error(error.message)
     }
   })
 }
 
-export const deleteData = () => {}
+export const deleteRemoteData = (_id, currentStore) => {
+  if (currentStore) {
+    const data = localStorage.getItem('notes')
+    if (data) {
+      const notes = JSON.parse(data)
+      if (has(notes, _id)) {
+        const updatedStorage = omit(notes, _id)
+        localStorage.setItem('notes', JSON.stringify(updatedStorage))
+
+        return Promise.resolve(updatedStorage)
+      }
+
+      return Promise.reject(new Error('failed to process JSON data from localStorage'))
+    }
+
+    return Promise.reject(new Error('failed to get data from localStorage'))
+  }
+
+  return notesRef.update({[_id]: null} )
+}
