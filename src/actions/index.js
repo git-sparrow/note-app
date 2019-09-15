@@ -19,12 +19,13 @@ export const getNoteToEdit = noteToEdit => ({
 })
 
 export const setData = ({ name, content, author, id, currentStore }) => {
-  const newNote = { [`_id${id}`]: { name, content, author, id } }
+  const _id = `_id${id}`
+  const newNote = { [_id]: { name, content, author, id } }
 
   return dispatch => {
     dispatch(toggleLoading(true))
 
-    return sendData(newNote, currentStore).then(result => {
+    return sendData({ newNote, currentStore, _id }).then(result => {
       if (currentStore) {
         dispatch(updateNotesStore(result))
       }
@@ -38,9 +39,7 @@ export const getData = currentStore => {
     dispatch(toggleLoading(true))
 
     return fetchData(currentStore).then(result => {
-      if (currentStore) {
-        dispatch(updateNotesStore(result))
-      }
+      dispatch(updateNotesStore(result))
       dispatch(toggleLoading(false))
       return result
     })
@@ -58,7 +57,6 @@ export const updateData = ({ _id, name, content, author, id, currentStore }) => 
         dispatch(updateNotesStore(result))
       }
       dispatch(toggleLoading(false))
-      return result
     })
   }
 }

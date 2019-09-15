@@ -7,7 +7,7 @@ class EditNote extends Component {
   constructor(props) {
     super(props)
     const { notes = {} } = this.props
-    const urlID  = this.props.match.params.id
+    const urlID = this.props.match.params.id
     const noteToEdit = !!urlID ? urlID : ''
     const currentNote = notes[noteToEdit]
 
@@ -39,7 +39,9 @@ class EditNote extends Component {
   handleSave = () => {
     const { _id, name, content, author, id } = this.state
     const { onUpdateData, currentStore } = this.props
-    onUpdateData({ _id, name, content, author, id, currentStore })
+    onUpdateData({ _id, name, content, author, id, currentStore }).catch(error =>
+      console.error(error)
+    )
   }
 
   render() {

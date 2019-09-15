@@ -1,8 +1,8 @@
 import firebaseDB from '../db'
 
-let notesRef = firebaseDB.ref('/notes')
+const notesRef = firebaseDB.ref('/notes')
 
-export const sendData = (newNote, currentStore) => {
+export const sendData = ({ newNote, currentStore, _id }) => {
   if (currentStore) {
     const data = localStorage.getItem('notes')
     if (!data) {
@@ -16,14 +16,11 @@ export const sendData = (newNote, currentStore) => {
 
     return Promise.resolve(newStorage)
   }
-  notesRef.set(newNote, function(error) {
+    return notesRef.update(newNote, (error) => {
     if (error) {
-      console.error(error)
-      return Promise.reject(error)
+      throw new Error(error.message)
     }
   })
-
-  return Promise.resolve()
 }
 
 export const fetchData = currentStore => {
@@ -35,8 +32,10 @@ export const fetchData = currentStore => {
       return Promise.resolve(notes)
     }
 
-    return Promise.resolve({})
+    return Promise.reject(new Error('failed to get data from localStorage'))
   }
+
+  return notesRef.once('value').then(snapshot => snapshot.val())
 }
 
 export const updateRemoteData = ({ updatedNote, currentStore, _id }) => {
@@ -53,12 +52,10 @@ export const updateRemoteData = ({ updatedNote, currentStore, _id }) => {
 
     return Promise.resolve(newStorage)
   }
-  notesRef.child(_id).update({ ...updatedNote }, function(error) {
+
+  return notesRef.update({ ...updatedNote }, (error) => {
     if (error) {
-      console.error(error)
-      return Promise.reject(error)
-    } else {
-      return Promise.resolve({})
+      throw new Error(error.message)
     }
   })
 }

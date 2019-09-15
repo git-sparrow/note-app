@@ -5,7 +5,7 @@ import { getData, setData, updateNotesStore } from '../../actions'
 import NotesList from './NotesList'
 import firebaseDB from '../../db'
 
-let notesRef = firebaseDB.ref('/notes')
+const notesRef = firebaseDB.ref('/notes')
 
 class HomePage extends Component {
   constructor(props) {
@@ -25,7 +25,9 @@ class HomePage extends Component {
     }
     notesRef.on('value', snapshot => {
       const notes = snapshot.val()
-      onUpdateNotesStore(notes)
+        if (notes) {
+            onUpdateNotesStore(notes)
+        }
     })
   }
 
@@ -50,7 +52,7 @@ class HomePage extends Component {
       currentStore,
     }
 
-    onSetData(newNote)
+    onSetData(newNote).catch(error => console.error(error))
 
     this.setState({
       name: '',
