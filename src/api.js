@@ -41,22 +41,22 @@ export const fetchData = currentStore => {
   return notesRef.once('value').then(snapshot => snapshot.val())
 }
 
-export const updateRemoteData = ({ updatedNote, currentStore, _id }) => {
+export const updateRemoteData = (updatedData, currentStore) => {
   if (currentStore === remoteStorage.localStorage) {
     const data = localStorage.getItem('notes')
     if (!data) {
-      localStorage.setItem('notes', JSON.stringify(updatedNote))
+      localStorage.setItem('notes', JSON.stringify(updatedData))
 
-      return Promise.resolve(updatedNote)
+      return Promise.resolve(updatedData)
     }
     const notes = JSON.parse(data)
-    const newStorage = { ...notes, ...updatedNote }
+    const newStorage = { ...notes, ...updatedData }
     localStorage.setItem('notes', JSON.stringify(newStorage))
 
     return Promise.resolve(newStorage)
   }
 
-  return notesRef.update({ ...updatedNote }, error => {
+  return notesRef.update({ ...updatedData }, error => {
     if (error) {
       throw new Error(error.message)
     }
