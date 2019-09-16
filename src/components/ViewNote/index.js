@@ -63,7 +63,7 @@ class ViewNote extends Component {
     notesRef.off()
   }
 
-  handleBacklClick = () => {
+  handleBackClick = () => {
     history.push('/')
   }
 
@@ -111,7 +111,7 @@ class ViewNote extends Component {
               type="button"
               className="btn btn-outline-light btn-lg float-right"
               id="canselButton"
-              onClick={this.handleBacklClick}
+              onClick={this.handleBackClick}
             >
               Back
             </button>

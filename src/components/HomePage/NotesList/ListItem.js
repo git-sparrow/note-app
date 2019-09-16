@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { getNoteToEdit } from '../../../reduxComponents/actions'
+import {getNoteToEdit, deleteData} from '../../../reduxComponents/actions'
 import history from '../../../history'
 
 class ListItem extends Component {
   handleViewClick = e => {
-      const { onGetNoteToEdit, _id } = this.props
-      onGetNoteToEdit(_id)
-      history.push(`/view-note/${_id}`)
+    const { _id } = this.props
+    history.push(`/view-note/${_id}`)
   }
 
   handleEditClick = e => {
@@ -17,7 +16,10 @@ class ListItem extends Component {
     history.push(`/edit/${_id}`)
   }
 
-  handleDeleteClick = e => {}
+    handleDeleteClick = () => {
+    const { onDeleteNote, currentStore, _id } = this.props
+    onDeleteNote(_id, currentStore).catch(console.error)
+  }
 
   render() {
     const { note, _id } = this.props
@@ -73,7 +75,11 @@ class ListItem extends Component {
 
 export default withRouter(
   connect(
-    null,
-    { onGetNoteToEdit: getNoteToEdit }
+    notesStore => {
+      return {
+        currentStore: notesStore.currentStore,
+      }
+    },
+    { onGetNoteToEdit: getNoteToEdit, onDeleteNote: deleteData }
   )(ListItem)
 )

@@ -90,7 +90,7 @@ class HomePage extends Component {
   }
 
   render() {
-    const { name, content, author } = this.state
+    const { name, content } = this.state
     const { currentStore } = this.props
     const localStorageBtnClass = classNames('btn', {
       'btn-success': currentStore === remoteStorage.localStorage,
@@ -138,6 +138,8 @@ class HomePage extends Component {
                   name="name"
                   onChange={this.handleInputChange}
                   value={name}
+                  pattern="[a-zA-Z0-9]+"
+                  required
                 />
               </div>
               <div className="form-group">
@@ -148,6 +150,8 @@ class HomePage extends Component {
                   name="content"
                   onChange={this.handleInputChange}
                   value={content}
+                  pattern="[a-zA-Z0-9]+"
+                  required
                 />
               </div>
               <button type="submit" className="btn btn-primary">
