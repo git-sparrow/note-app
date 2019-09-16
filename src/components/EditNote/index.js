@@ -57,6 +57,15 @@ class EditNote extends Component {
 
   render() {
     const { name, content } = this.state
+    const { isLoading } = this.props
+
+    if (isLoading) {
+      return (
+        <div className="spinner-grow text-primary" role="status">
+          <span className="sr-only">Loading...</span>
+        </div>
+      )
+    }
 
     return (
       <div className="editContact-form">
@@ -75,14 +84,14 @@ class EditNote extends Component {
             </button>
             <button
               type="button"
-              className="btn btn-danger btn-lg"
+              className="btn btn-danger btn-lg ml-2"
               id="deleteButton"
               onClick={this.handleDeletion}
             >
               Delete
             </button>
             <button
-              className="navbar__button btn btn-light btn-lg"
+              className="navbar__button btn btn-light btn-lg ml-2"
               id="saveButton"
               onClick={this.handleSave}
             >
@@ -128,11 +137,12 @@ class EditNote extends Component {
 }
 
 EditNote.propTypes = {
-  notes: PropTypes.array.isRequired,
+  notes: PropTypes.object.isRequired,
   currentStore: PropTypes.string.isRequired,
   onGetData: PropTypes.func.isRequired,
   onUpdateData: PropTypes.func.isRequired,
   onDeleteNote: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 }
 
 export default withRouter(
@@ -141,6 +151,7 @@ export default withRouter(
       return {
         notes: notesStore.notes,
         currentStore: notesStore.currentStore,
+        isLoading: notesStore.isLoading,
       }
     },
     { onGetData: getData, onUpdateData: updateData, onDeleteNote: deleteData }

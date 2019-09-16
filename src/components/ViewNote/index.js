@@ -3,9 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import {
   getData,
-  setData,
   updateNotesStore,
-  changeRemoteStore,
   updateData,
 } from '../../reduxComponents/actions'
 import CommentaryList from './CommentaryList'
@@ -99,6 +97,15 @@ class ViewNote extends Component {
 
   render() {
     const { name, content, commentary, commentaryAuthor, commentaryContent } = this.state
+    const { isLoading } = this.props
+
+    if (isLoading) {
+      return (
+        <div className="spinner-grow text-primary" role="status">
+          <span className="sr-only">Loading...</span>
+        </div>
+      )
+    }
 
     return (
       <>
@@ -166,17 +173,22 @@ class ViewNote extends Component {
 }
 
 ViewNote.propTypes = {
-  notes: PropTypes.array.isRequired,
+  notes: PropTypes.object.isRequired,
   currentStore: PropTypes.string.isRequired,
   onGetData: PropTypes.func.isRequired,
   onUpdateData: PropTypes.func.isRequired,
   onUpdateNotesStore: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 }
 
 export default withRouter(
   connect(
     notesStore => {
-      return { notes: notesStore.notes, currentStore: notesStore.currentStore }
+      return {
+        notes: notesStore.notes,
+        currentStore: notesStore.currentStore,
+        isLoading: notesStore.isLoading,
+      }
     },
     {
       onGetData: getData,

@@ -92,7 +92,7 @@ class HomePage extends Component {
 
   render() {
     const { name, content } = this.state
-    const { currentStore } = this.props
+    const { currentStore, isLoading } = this.props
     const localStorageBtnClass = classNames('btn', {
       'btn-success': currentStore === remoteStorage.localStorage,
       'btn-secondary': currentStore !== remoteStorage.localStorage,
@@ -101,6 +101,14 @@ class HomePage extends Component {
       'btn-success': currentStore === remoteStorage.firebase,
       'btn-secondary': currentStore !== remoteStorage.firebase,
     })
+
+    if (isLoading) {
+      return (
+        <div className="spinner-grow text-primary" role="status">
+          <span className="sr-only">Loading...</span>
+        </div>
+      )
+    }
 
     return (
       <>
@@ -170,18 +178,23 @@ class HomePage extends Component {
 }
 
 HomePage.propTypes = {
-  notes: PropTypes.array.isRequired,
+  notes: PropTypes.object.isRequired,
   currentStore: PropTypes.string.isRequired,
   onGetData: PropTypes.func.isRequired,
   onSetData: PropTypes.func.isRequired,
   onUpdateNotesStore: PropTypes.func.isRequired,
   onChangeRemoteStore: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 }
 
 export default withRouter(
   connect(
     notesStore => {
-      return { notes: notesStore.notes, currentStore: notesStore.currentStore }
+      return {
+        notes: notesStore.notes,
+        currentStore: notesStore.currentStore,
+        isLoading: notesStore.isLoading,
+      }
     },
     {
       onGetData: getData,

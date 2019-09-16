@@ -25,7 +25,7 @@ class NotesList extends Component {
 }
 
 NotesList.propTypes = {
-  notes: PropTypes.array.isRequired,
+  notes: PropTypes.object.isRequired,
   onGetNoteToEdit: PropTypes.func.isRequired,
 }
 

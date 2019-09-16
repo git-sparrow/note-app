@@ -31,20 +31,36 @@ class ListItem extends Component {
         <div>
           <div>Note name: {note.name}</div>
           <div>Content: {note.content}</div>
-          {commentary &&
-            commentary.length &&
-            commentary.map(item => {
-              return (
-                <div className="p-1 ml-2">
-                  <h6>Commentaries:</h6>
-                  <div className="ml-2">Author: {item.author}</div>
-                  <div className="ml-2">Content: {item.content}</div>
-                  <div className="ml-2">Created at: {item.created_at}</div>
+          {commentary && commentary.length && (
+            <div>
+              <button
+                className="btn btn-outline-info btn-sm"
+                type="button"
+                data-toggle="collapse"
+                data-target={`#collapse${_id}`}
+                aria-expanded="false"
+                aria-controls={`collapse${_id}`}
+              >
+                Show commentaries
+              </button>
+              <div className="collapse pt-1" id={`collapse${_id}`}>
+                <div className="card card-body">
+                  {commentary.map(item => {
+                    return (
+                      <div className="p-1 ml-2" key={item.author}>
+                        <h6>Commentaries:</h6>
+                        <div className="ml-2">Author: {item.author}</div>
+                        <div className="ml-2">Content: {item.content}</div>
+                        <div className="ml-2">Created at: {item.created_at}</div>
+                      </div>
+                    )
+                  })}
                 </div>
-              )
-            })}
+              </div>
+            </div>
+          )}
         </div>
-        <div className="d-flex">
+        <div className="d-flex pt-2">
           <button
             id={_id}
             type="button"
