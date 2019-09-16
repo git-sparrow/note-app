@@ -6,7 +6,6 @@ import omit from 'lodash/omit'
 const notesRef = firebaseDB.ref('/notes')
 
 export const sendData = (newNote, currentStore) => {
-  console.log(newNote)
   if (currentStore === remoteStorage.localStorage) {
     const data = localStorage.getItem('notes')
     if (!data) {

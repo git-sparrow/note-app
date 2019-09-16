@@ -12,6 +12,7 @@ import CommentaryList from './CommentaryList'
 import firebaseDB from '../../firebaseDataBase'
 import { currentStore as remoteStorage } from '../../constants'
 import history from '../../history'
+import PropTypes from 'prop-types'
 
 const notesRef = firebaseDB.ref('/notes')
 
@@ -19,12 +20,9 @@ class ViewNote extends Component {
   constructor(props) {
     super(props)
     const { notes = {} } = this.props
-    console.log(notes)
     const urlID = this.props.match.params.id
     const noteToEdit = !!urlID ? urlID : ''
-    console.log(noteToEdit)
     const currentNote = notes[noteToEdit]
-    console.log(currentNote)
 
     const { name = '', content = '', commentary = [] } = !!currentNote ? currentNote : {}
 
@@ -118,10 +116,15 @@ class ViewNote extends Component {
           </div>
         </nav>
         <div className="container-fluid row p-3">
-          <h3>Note details</h3>
-          <div className="col-12">Note name: {name}</div>
-          <div className="col-12">Content: {content}</div>
-          <div className="col-12">
+          <h3 className="ml-1">Note details</h3>
+          <div className="col-12 h4">
+            Note name: <span className="h5">{name}</span>
+          </div>
+          <div className="col-12 h4">
+            Content: <span className="h5">{content}</span>
+          </div>
+          <div className="col-12 pt-3">
+            <h4 className="ml-1">Add comment to note</h4>
             <form onSubmit={this.handleSubmit}>
               <div className="form-group">
                 <label htmlFor="note-name">Input your comment here</label>
@@ -131,6 +134,8 @@ class ViewNote extends Component {
                   name="commentaryContent"
                   onChange={this.handleInputChange}
                   value={commentaryContent}
+                  pattern="[a-zA-Z0-9]+"
+                  required
                 />
               </div>
               <div className="form-group">
@@ -141,18 +146,31 @@ class ViewNote extends Component {
                   name="commentaryAuthor"
                   onChange={this.handleInputChange}
                   value={commentaryAuthor}
+                  pattern="[a-zA-Z0-9]+"
+                  required
                 />
               </div>
-              <button type="submit" className="btn btn-primary">
+              <button type="submit" className="btn btn-primary float-right">
                 Add comment
               </button>
             </form>
           </div>
-          <CommentaryList commentary={commentary} />
+          <div className="container pt-3">
+            <h4>Commentaries list</h4>
+            <CommentaryList commentary={commentary} />
+          </div>
         </div>
       </>
     )
   }
+}
+
+ViewNote.propTypes = {
+  notes: PropTypes.array.isRequired,
+  currentStore: PropTypes.string.isRequired,
+  onGetData: PropTypes.func.isRequired,
+  onUpdateData: PropTypes.func.isRequired,
+  onUpdateNotesStore: PropTypes.func.isRequired,
 }
 
 export default withRouter(
@@ -162,10 +180,8 @@ export default withRouter(
     },
     {
       onGetData: getData,
-      onSetData: setData,
       onUpdateData: updateData,
       onUpdateNotesStore: updateNotesStore,
-      onChangeRemoteStore: changeRemoteStore,
     }
   )(ViewNote)
 )

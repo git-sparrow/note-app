@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom'
 import { getNoteToEdit } from '../../../reduxComponents/actions'
 import ListItem from './ListItem'
 import isEmpty from 'lodash/isEmpty'
+import PropTypes from 'prop-types'
 
 class NotesList extends Component {
   render() {
@@ -21,6 +22,11 @@ class NotesList extends Component {
       </ul>
     )
   }
+}
+
+NotesList.propTypes = {
+  notes: PropTypes.array.isRequired,
+  onGetNoteToEdit: PropTypes.func.isRequired,
 }
 
 export default withRouter(

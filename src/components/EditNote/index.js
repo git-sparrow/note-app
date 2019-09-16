@@ -3,17 +3,15 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { getData, updateData, deleteData } from '../../reduxComponents/actions'
 import history from '../../history'
+import PropTypes from 'prop-types'
 
 class EditNote extends Component {
   constructor(props) {
     super(props)
     const { notes = {} } = this.props
-    console.log(notes)
     const urlID = this.props.match.params.id
     const noteToEdit = !!urlID ? urlID : ''
-    console.log(noteToEdit)
     const currentNote = notes[noteToEdit]
-    console.log(currentNote)
 
     const { name = '', content = '', commentary = [] } = !!currentNote ? currentNote : {}
 
@@ -129,12 +127,19 @@ class EditNote extends Component {
   }
 }
 
+EditNote.propTypes = {
+  notes: PropTypes.array.isRequired,
+  currentStore: PropTypes.string.isRequired,
+  onGetData: PropTypes.func.isRequired,
+  onUpdateData: PropTypes.func.isRequired,
+  onDeleteNote: PropTypes.func.isRequired,
+}
+
 export default withRouter(
   connect(
     notesStore => {
       return {
         notes: notesStore.notes,
-        noteToEdit: notesStore.noteToEdit,
         currentStore: notesStore.currentStore,
       }
     },

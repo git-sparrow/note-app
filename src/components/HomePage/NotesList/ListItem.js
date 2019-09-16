@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import {getNoteToEdit, deleteData} from '../../../reduxComponents/actions'
+import { getNoteToEdit, deleteData } from '../../../reduxComponents/actions'
 import history from '../../../history'
+import PropTypes from 'prop-types'
 
 class ListItem extends Component {
   handleViewClick = e => {
@@ -16,7 +17,7 @@ class ListItem extends Component {
     history.push(`/edit/${_id}`)
   }
 
-    handleDeleteClick = () => {
+  handleDeleteClick = () => {
     const { onDeleteNote, currentStore, _id } = this.props
     onDeleteNote(_id, currentStore).catch(console.error)
   }
@@ -34,10 +35,11 @@ class ListItem extends Component {
             commentary.length &&
             commentary.map(item => {
               return (
-                <div>
-                  <div>Author: {item.author}</div>
-                  <div>Content: {item.content}</div>
-                  <div>Created at: {item.created_at}</div>
+                <div className="p-1 ml-2">
+                  <h6>Commentaries:</h6>
+                  <div className="ml-2">Author: {item.author}</div>
+                  <div className="ml-2">Content: {item.content}</div>
+                  <div className="ml-2">Created at: {item.created_at}</div>
                 </div>
               )
             })}
@@ -71,6 +73,12 @@ class ListItem extends Component {
       </li>
     )
   }
+}
+
+ListItem.propTypes = {
+  currentStore: PropTypes.string.isRequired,
+  onGetNoteToEdit: PropTypes.func.isRequired,
+  onDeleteNote: PropTypes.func.isRequired,
 }
 
 export default withRouter(

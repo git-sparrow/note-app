@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import {
   getData,
@@ -166,6 +167,15 @@ class HomePage extends Component {
       </>
     )
   }
+}
+
+HomePage.propTypes = {
+  notes: PropTypes.array.isRequired,
+  currentStore: PropTypes.string.isRequired,
+  onGetData: PropTypes.func.isRequired,
+  onSetData: PropTypes.func.isRequired,
+  onUpdateNotesStore: PropTypes.func.isRequired,
+  onChangeRemoteStore: PropTypes.func.isRequired,
 }
 
 export default withRouter(
